@@ -33,6 +33,7 @@ def view(request, d):
                                           "mail_servers":domain.mxserver_set.all(),
                                           "recent_domains":get_random_domain_checks(NUMBER_OF_RECENT_SEARCH)})
 
+
 def search(request, d=None):
     if d is None:
         d = request.REQUEST['domain'] #todo to lower
