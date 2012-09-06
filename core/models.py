@@ -32,6 +32,14 @@ class Domain(models.Model):
     request_longitude = models.CharField(max_length=255, null=True)
     request_referer = models.CharField(max_length=255, null=True)
 
+
+    title = models.CharField(max_length=400, null=True)
+    keywords = models.CharField(max_length=2550, null=True)
+    description = models.CharField(max_length=2550, null=True)
+    encoding = models.CharField( max_length=20,null=True)
+    full_html = models.TextField()
+    content = models.TextField()
+
     def __unicode__(self):
         return self.domain
 
@@ -43,6 +51,26 @@ class Domain(models.Model):
         # Data modifying operation - commit required
         cursor.execute("UPDATE core_domain SET archived = now() WHERE domain = %s", [self.domain])
         transaction.commit_unless_managed()
+
+
+
+class SeoImage(models.Model):
+    src = models.CharField(max_length=400,null=True)
+    alt = models.CharField(max_length=1000,null=True)
+    title = models.CharField(max_length=1000,null=True)
+    
+    domain = models.ForeignKey(Domain)
+
+
+
+class SeoHeading(models.Model):
+    level = models.IntegerField()
+    content = models.CharField(max_length=1000,null=True)
+    domain = models.ForeignKey(Domain)
+
+#class SeoLink(models.Model):
+#    src = models.CharField(null=True)
+#    title = models.ForeignKey(Domain)
 
 
 class NameServer(models.Model):

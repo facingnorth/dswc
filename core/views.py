@@ -3,7 +3,8 @@ import datetime
 import logging
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render
-from core.models import Domain, NameServer
+from core.markupservice import extract_seo_facts
+from core.models import Domain, NameServer, SeoImage, SeoHeading
 from service import *
 
 NUMBER_OF_RECENT_SEARCH = 15
@@ -37,13 +38,15 @@ def search(request, d=None):
         d = request.REQUEST['domain'] #todo to lower
 
     d = extract_domain_name(d)
-
     ip = is_domain_valid(d)
 
     if ip is None:
         return render(request, 'index.html', {"error": "this is not valid site!"},)
 
+
+    seo_dict=None
     headers = get_http_headers(d)
+    print headers
 
     domain = Domain()
     domain.domain = d
@@ -52,9 +55,6 @@ def search(request, d=None):
 
     domain.ip = ip
 
-    if headers is not None:
-        domain.server= get_header_value(headers, SERVER_KEY)
-        domain.x_powered_by= get_header_value(headers, X_POWERED_BY_KEY)
 
     geo_record = get_geo_record(domain.ip)
     domain.city = geo_record['city']
@@ -84,6 +84,40 @@ def search(request, d=None):
 
     domain.save()
 
+
+    if headers is not None:
+        #domain.server= get_header_value(headers, SERVER_KEY)
+        #domain.x_powered_by= get_header_value(headers, X_POWERED_BY_KEY)
+        seo_dict = extract_seo_facts(domain.domain)
+        domain.title = seo_dict.get('title')
+        domain.encoding = seo_dict.get('encoding')
+        domain.keywords = seo_dict.get('keywords')
+        domain.description = seo_dict.get('description')
+
+        domain.full_html = seo_dict.get('source')
+        domain.content = seo_dict.get('text_content')
+        domain.save()
+
+        if seo_dict.get("images"):
+            for i in seo_dict.get("images"):
+                image = SeoImage()
+                image.src = i.get('src')
+                image.alt = i.get('alt')
+                image.title = i.get('title')
+                image.domain = domain
+                image.save()
+
+
+        for i in range(6):
+            if seo_dict.get("h%s" % i):
+                for heading in seo_dict.get("h%s" % i ):
+                    h = SeoHeading()
+                    h.content = heading
+                    h.level = i
+                    h.domain = domain
+                    h.save()
+
+                    
     name_servers = get_ns_record(domain.domain)
     for v in name_servers:
         ns = NameServer()
@@ -104,4 +138,5 @@ def search(request, d=None):
 
     return render(request, 'index.html', {"domain": domain, "name_servers":domain.nameserver_set.all(),
                                           "mail_servers":domain.mxserver_set.all(),
+                                          "seo_dict": seo_dict,
                                           "recent_domains":get_latest_n_domain_checks(NUMBER_OF_RECENT_SEARCH)})

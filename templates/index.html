@@ -8,7 +8,7 @@
     {% if domain %}
     {% if view %}
     <div class="row">
-        <div class="span7 offset1">
+        <div class="span9 offset1">
             <p  class="alert">
                 <small>Following information is retrieved at {{ domain.checked_at |naturaltime}}, you can make new search by using the form above</small>
             </p>
@@ -18,7 +18,7 @@
 
 
     <div class="row">
-        <div class="span4 offset1">
+        <div class="span9 offset1">
             <h5>Site Details</h5>
             <ul>
                 <li><strong>Domain: </strong>{{ domain.domain }}</li>
@@ -36,18 +36,42 @@
                 </li>
 
                 <li><strong>Location: </strong>{{ domain.city }} {{ domain.country_code }}</li>
+            </ul>
 
+            {% if seo_dict %}
+            <h5>Seo Facts</h5>
+            <ul>
+                {% if domain.title %}
+                <li><strong>Title: </strong>{{ domain.title }}</li>
+                {% endif %}
 
-                <li><strong>Google Page Rank: </strong>{{ domain.page_rank }}</li>
+                {% if domain.keywords %}
+                <li><strong>Keyword: </strong>{{ domain.keywords }}</li>
+                {% endif %}
+
+                {% if domain.description %}
+                <li><strong>Description: </strong>{{ domain.description }}</li>
+                {% endif %}
+
+                {% if domain.encoding %}
+                <li><strong>Encoding: </strong>{{ domain.encoding }}</li>
+                {% endif %}
+ 
+                 <li><strong>Google Page Rank: </strong>{{ domain.page_rank }}</li>
                 <li><strong>Alexa: </strong>{{ domain.alexa_rank |intcomma}}</li>
             </ul>
+
+            {% endif %}
+
+
+
         </div>
     </div>
     {% endif %}
 
     {% if name_servers %}
     <div class="row">
-        <div class="span4 offset1">
+        <div class="span9 offset1">
             <h5>Name Servers</h5>
             <ul>
                 {% for ns in name_servers %}
@@ -61,7 +85,7 @@
 
     {% if mail_servers %}
     <div class="row">
-        <div class="span4 offset1">
+        <div class="span9 offset1">
             <h5>Mail Servers</h5>
             <ul>
                 {% for mx in mail_servers %}
