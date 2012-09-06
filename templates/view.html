@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <title>Site Spy</title>
+    </head>
+    <body>
+           <div>
+            <form action="/search" method="get">
+                <div>
+                    <div>Site name:</div> <input type="text" name="domain" />
+                    <div style="color: red">{{ error }}</div>
+                </div>
+
+                <div>
+                    <input type="submit" name="search" value="search for me!" />
+                </div>
+            </form>
+        </div>
+
+
+        <h2>Site details</h2>
+        <div>
+            <div>
+                domain: {{ domain.domain }}
+            </div>
+
+            <div>
+                ip: {{ domain.ip }}
+            </div>
+
+            <div>
+                hosted by: <a href="https://www.google.com.au/search?num=100&hl=en&safe=off&q={{ domain.isp }}">{{ domain.isp }}</a>
+            </div>
+
+            <div>
+                google page rank: {{ domain.page_rank }}
+            </div>
+
+            <div>
+                alexa rank: {{ domain.alexa_rank }}
+            </div>
+
+            <div>
+                location: {{ domain.city | default :"" }}, {{ domain.state |default:"" }} {{ domain.country_code }}
+            </div>
+
+            <div>
+                server: {{ domain.server }} {{ domain.x_powered_by }}
+            </div>
+        </div>
+
+        <h3>Name servers</h3>
+           <ul>
+           {% for ns in name_servers %}
+               <li>{{ ns.hostname }} by {{ ns.isp  }}</li>
+           {% endfor %}
+
+           </ul>
+
+
+
+           <h3>Mail servers</h3>
+           <ul>
+               {% for mx in mail_servers %}
+                   <li>{{ mx.hostname }} by {{ mx.isp  }}</li>
+               {% endfor %}
+
+           </ul>
+
+        <h3>Recent Searches</h3>
+           <ul>
+        {% for d in domains %}
+            <li>{{ d.domain }}</li>
+        {% empty %}
+            <li>Sorry, no domains in this list!</li>
+        {% endfor %}
+        </ul>
+    </body>
+</html>

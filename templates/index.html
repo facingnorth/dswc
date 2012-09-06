@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+
+
+{% block content %}
+
+    {% if domain %}
+    {% if view %}
+    <div class="row">
+        <div class="span7 offset1">
+            <p  class="alert">
+                <small>Following information is retrieved at {{ domain.checked_at |naturaltime}}, you can make new search by using the form above</small>
+            </p>
+        </div>
+    </div>
+    {% endif %}
+
+
+    <div class="row">
+        <div class="span4 offset1">
+            <h5>Site Details</h5>
+            <ul>
+                <li><strong>Domain: </strong>{{ domain.domain }}</li>
+                <li><strong>Server: </strong>{{ domain.server|default:"Unknown" }} <small>{{ domain.x_powered_by |default:""}}</small></li>
+                <li><strong>IP: </strong>{{ domain.ip }}</li>
+                <li><strong>Hosted by: </strong>
+                    {% if domain.isp == "Linode" %}
+                    <a href="http://www.linode.com/?r=148ac8327204f3f61c76690e7faa709611384a24" target="_blank">{{ domain.isp }}</a>
+                    {% elif domain.isp == "New Dream Network, LLC"  %}
+                    <a href="http://www.dreamhost.com/r.cgi?611717" target="_blank">{{ domain.isp }}</a>
+                    {% else %}
+                    <a href="http://www.google.com.au/search?q={{ domain.isp }}&ie=utf-8&oe=utf-8&client=ubuntu&channel=fs&redir_esc=&ei=LGs9UInXHcuviQferIHwBA" target="_blank">{{ domain.isp }}</a>
+                    {% endif %}
+
+                </li>
+
+                <li><strong>Location: </strong>{{ domain.city }} {{ domain.country_code }}</li>
+
+
+                <li><strong>Google Page Rank: </strong>{{ domain.page_rank }}</li>
+                <li><strong>Alexa: </strong>{{ domain.alexa_rank |intcomma}}</li>
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if name_servers %}
+    <div class="row">
+        <div class="span4 offset1">
+            <h5>Name Servers</h5>
+            <ul>
+                {% for ns in name_servers %}
+                    <li>{{ ns.hostname }} hosted by <a href="http://www.google.com.au/search?q={{ ns.isp }}&ie=utf-8&oe=utf-8&client=ubuntu&channel=fs&redir_esc=&ei=LGs9UInXHcuviQferIHwBA" target="_blank">{{ ns.isp }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+
+    {% if mail_servers %}
+    <div class="row">
+        <div class="span4 offset1">
+            <h5>Mail Servers</h5>
+            <ul>
+                {% for mx in mail_servers %}
+                    <li>{{ mx.hostname }} hosted by  <a href="http://www.google.com.au/search?q={{ mx.isp }}&ie=utf-8&oe=utf-8&client=ubuntu&channel=fs&redir_esc=&ei=LGs9UInXHcuviQferIHwBA" target="_blank">{{ mx.isp }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+
+    <div class="row">
+        <div class="span4 offset1">
+            <h5>Recent Searches</h5>
+            <ul>
+            {% for d in recent_domains %}
+                {% url 'view_domain' d.domain as the_url %}
+                <li><a href="{{ the_url }}">{{ d.domain }}</a> checked at {{ d.checked_at | naturaltime}}</li>
+            {% empty %}
+                <li>No recent domain search records found...</li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
