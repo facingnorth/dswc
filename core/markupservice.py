@@ -20,7 +20,6 @@ def extract_seo_facts(url):
     #todo make sure it works for http and https
     url = "http://" + url
     logger.info("extracting seo facts for url %s" % url)
-    print ("extracting seo facts for url %s" % url)
     page=urllib2.urlopen(url)
     
     source = page.read()

@@ -125,7 +125,7 @@ GEO_LITE_CITY_FILE = os.path.join(SITE_ROOT, "geoip/GeoLiteCity.dat")
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d  %(filename)s  %(lineno)d %(message)s'
@@ -148,6 +148,13 @@ LOGGING = {
             'level': 'INFO',                 # specify the logging level
             'propagate': True,
         },
+
+        'django.db.backends': {
+            'handlers': ['file_core.views'], # specify what handler to associate
+            'level': 'DEBUG',                 # specify the logging level
+            'propagate': True,
+        },
+
 
     }
 }

@@ -1,6 +1,7 @@
 # Create your views here.
 import datetime
 import logging
+from django.db import connections
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render
 from core.markupservice import extract_seo_facts
@@ -10,6 +11,8 @@ from service import *
 NUMBER_OF_RECENT_SEARCH = 15
 
 logger = logging.getLogger(__name__)
+
+ 
 
 def is_domain_valid(d):
     if (d is None) or (len(d.strip())==0):
@@ -47,8 +50,7 @@ def search(request, d=None):
 
     seo_dict=None
     headers = get_http_headers(d)
-    print headers
-
+ 
     domain = Domain()
     domain.domain = d
 
@@ -120,6 +122,7 @@ def search(request, d=None):
 
                     
     name_servers = get_ns_record(domain.domain)
+    print name_servers
     for v in name_servers:
         ns = NameServer()
         ns.hostname = v
@@ -130,14 +133,21 @@ def search(request, d=None):
 
 
     mail_servers = get_mx_record(domain.domain)
-    print mail_servers
     for mx in mail_servers:
+        print mx
         mx.domain  = domain
         mx.save()
 
 
 
-    return render(request, 'index.html', {"domain": domain, "name_servers":domain.nameserver_set.all(),
-                                          "mail_servers":domain.mxserver_set.all(),
+    mx_servers = domain.mxserver_set.all(),
+    name_servers = domain.nameserver_set.all()
+
+    from django.db import connection
+    connections.queries = []
+    print connections.queries
+
+    return render(request, 'index.html', {"domain": domain, "name_servers": name_servers,
+                                          "mail_servers": mx_servers,
                                           "seo_dict": seo_dict,
                                           "recent_domains":get_latest_n_domain_checks(NUMBER_OF_RECENT_SEARCH)})
