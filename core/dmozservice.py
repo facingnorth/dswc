@@ -1,4 +1,7 @@
 
+"""
+check the site has been indexed by dmoz or not, return boolean True or False
+"""
 def get_page_indexed(domain):
     import urllib2
     from BeautifulSoup import BeautifulSoup
@@ -8,13 +11,12 @@ def get_page_indexed(domain):
     headers = { 'User-Agent' : 'Mozilla/5.0' }
     req = urllib2.Request(url, None, headers)
     html = urllib2.urlopen(req).read()
-
     soup = BeautifulSoup(html)
-    
-    #http://scrapy.org/
-    result =soup.findAll("h3")
-    print result
-#    
-    return result
+    result =soup.findAll("h3", {"class" : "open-dir-sites"})
+    if result:
+        return True
 
-print get_page_indexed("xhtmlweaver.com")
+    return False
+
+
+print get_page_indexed("netregistry.com.au")

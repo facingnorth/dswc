@@ -15,8 +15,97 @@ def visible(element):
     return True
 
 
-def extract_seo_facts(url):
 
+'''
+check whether the domain has robots.txt
+'''
+
+def has_robots_txt(domain):
+    import urllib2
+    url = "http://{0}/robots.txt".format(domain)
+    headers = { 'User-Agent' : 'Mozilla/5.0' }
+    request = urllib2.Request(url,None,headers)
+    request.get_method = lambda : 'HEAD'
+
+    try:
+        response = urllib2.urlopen(request)
+        if response.code==200:
+            return True
+    except urllib2.HTTPError ,e:
+        print e
+        return False
+
+
+def has_sitemap_xml(domain):
+    import urllib2
+    url = "http://{0}/sitemap.xml".format(domain)
+    headers = { 'User-Agent' : 'Mozilla/5.0' }
+    request = urllib2.Request(url,None,headers)
+    request.get_method = lambda : 'HEAD'
+
+    try:
+        response = urllib2.urlopen(request)
+
+        if response.code==200:
+            return True
+    except urllib2.HTTPError ,e:
+        print e
+        return False
+
+
+
+
+class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
+    def http_error_302(self, req, fp, code, msg, headers):
+        result = urllib2.HTTPRedirectHandler.http_error_302(self, req, fp,
+            code, msg,
+            headers)
+        result.status = code
+        return result
+
+    def http_error_301(self, req, fp, code, msg, headers):
+        result = urllib2.HTTPRedirectHandler.http_error_302(self, req, fp,
+            code, msg,
+            headers)
+        result.status = code
+        return result
+
+#request = urllib2.Request("http://xhtmlweaver.com")
+#opener = urllib2.build_opener(SmartRedirectHandler())
+#obj = opener.open(request)
+#print 'I capture the http redirect code:', obj.status
+#print 'Its been redirected to:', obj.url
+
+
+#
+def www_resolve(domain):
+    import urllib2
+    url = "http://{0}".format(domain)
+    headers = { 'User-Agent' : 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:13.0) Gecko/20100101 Firefox/13.0.1',
+                'Host': domain
+            }
+    request = urllib2.Request(url,None,headers)
+    response = None
+    try:
+        response = urllib2.urlopen(request)
+        response.read()
+        print response.code
+        if response.code==200:
+            return "No"
+    except urllib2.HTTPError ,e:
+        request = urllib2.Request("http://{0}".format(domain))
+        opener = urllib2.build_opener(SmartRedirectHandler())
+        obj = opener.open(request)
+
+        if obj.status in (301, 302):
+            return "Yes"
+        else:
+            return "Failed"
+
+
+
+
+def extract_seo_facts(url):
     #todo make sure it works for http and https
     url = "http://" + url
     logger.info("extracting seo facts for url %s" % url)

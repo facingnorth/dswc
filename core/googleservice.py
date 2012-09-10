@@ -12,9 +12,9 @@ def get_page_indexed(domain):
     soup.prettify()
     result =soup.find("div",{"id": "resultStats"}).string
     print result
-#    result = result.lower().replace("About ","")
-#    result = result.replace(" results","")
+    result = result.lower().replace("about ","")
+    result = result.replace(" results","")
     result = result.replace(',','')
     return result
 
-print get_page_indexed("xhtmlweaver.com")
+print get_page_indexed("netregistry.com.au")
