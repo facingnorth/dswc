@@ -1,0 +1,5 @@
+gunicorn
+psycopg2
+BeautifulSoup
+pygeoip
+south
