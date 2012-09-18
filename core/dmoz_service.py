@@ -2,7 +2,7 @@
 """
 check the site has been indexed by dmoz or not, return boolean True or False
 """
-def get_page_indexed(domain):
+def dmoz_indexed(domain):
     import urllib2
     from BeautifulSoup import BeautifulSoup
     #from http://stackoverflow.com/questions/802134/changing-user-agent-on-urllib2-urlopen
@@ -19,4 +19,4 @@ def get_page_indexed(domain):
     return False
 
 
-print get_page_indexed("netregistry.com.au")
+print dmoz_indexed("netregistry.com.au")

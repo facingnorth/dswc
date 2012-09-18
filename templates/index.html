@@ -35,7 +35,7 @@
 
                 </li>
 
-                <li><strong>Location: </strong>{{ domain.city }} {{ domain.country_code }}</li>
+                <li><strong>Location: </strong>{{ domain.city }} {{ domain.region_name }} {{ domain.country_name }}</li>
             </ul>
 
             {% if seo_dict %}
@@ -43,21 +43,41 @@
             <ul>
                 {% if domain.title %}
                 <li><strong>Title: </strong>{{ domain.title }}</li>
+                <li>Length: {{ domain.title |length }} characters</li>
                 {% endif %}
 
                 {% if domain.keywords %}
                 <li><strong>Keyword: </strong>{{ domain.keywords }}</li>
+                <li>Length: {{ domain.keywords |length }} characters</li>
                 {% endif %}
 
                 {% if domain.description %}
                 <li><strong>Description: </strong>{{ domain.description }}</li>
+                <li>Length: {{ domain.description |length }} characters</li>
                 {% endif %}
 
                 {% if domain.encoding %}
                 <li><strong>Encoding: </strong>{{ domain.encoding }}</li>
                 {% endif %}
- 
-                 <li><strong>Google Page Rank: </strong>{{ domain.page_rank }}</li>
+
+
+
+                <li><strong>Has robots.txt: </strong>{{ domain.has_robots_txt }}</li>
+                <li><strong>Has sitemap.xml: </strong>{{ domain.has_sitemap_xml }}</li>
+                <li><strong>www resolve: </strong>{{ domain.www_resolve }}</li>
+
+
+
+                <li><strong>Dmoz indexed: </strong><a href="http://www.dmoz.org/search/?q={{ domain.domain }}" rel="nofollow">{{ domain.dmoz_indexed }}</a></li>
+
+                <li><strong>Google Back Links: </strong>
+                    <a href="https://www.google.com/search?q=%22{{ domain.domain }}%22-site:{{ domain.domain }}"  rel="nofollow">
+                    {{ domain.google_back_links |intcomma}}
+                    </a>
+                </li>
+                <li><strong>Google Indexed: </strong><a href="https://www.google.com/search?q=site:{{ domain.domain }}"  rel="nofollow">{{ domain.google_indexed |intcomma}}</a></li>
+
+                <li><strong>Google Page Rank: </strong>{{ domain.page_rank }}</li>
                 <li><strong>Alexa: </strong>{{ domain.alexa_rank |intcomma}}</li>
             </ul>
 
@@ -76,6 +96,8 @@
             <ul>
                 {% for ns in name_servers %}
                     <li>{{ ns.hostname }} hosted by <a href="http://www.google.com.au/search?q={{ ns.isp }}&ie=utf-8&oe=utf-8&client=ubuntu&channel=fs&redir_esc=&ei=LGs9UInXHcuviQferIHwBA" target="_blank">{{ ns.isp }}</a></li>
+                {% empty %}
+                    No Name Server Found
                 {% endfor %}
             </ul>
         </div>

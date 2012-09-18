@@ -89,7 +89,7 @@ def get_page_rank_rank(domain):
 def get_http_headers(domain):
     import httplib
     conn = httplib.HTTPConnection(domain)
-    conn.timeout =10
+    conn.timeout =30
     try:
         conn.request("HEAD", "/")
         res = conn.getresponse()

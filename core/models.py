@@ -10,7 +10,8 @@ class Domain(models.Model):
     cms = models.CharField(max_length=255, null=True)
     isp = models.CharField(max_length=255, null=True)
     country_code = models.CharField(max_length=255, null=True)
-    state = models.CharField(max_length=255, null=True)
+    country_name = models.CharField(max_length=255, null=True)
+    region_name = models.CharField(max_length=255, null=True)
     city = models.CharField(max_length=255, null=True)
     latitude = models.CharField(max_length=255, null=True)
     longitude = models.CharField(max_length=255, null=True)
@@ -26,8 +27,9 @@ class Domain(models.Model):
     request_user_agent  = models.CharField(max_length=255, null=True)
     request_isp  = models.CharField(max_length=255, null=True)
     request_country_code  = models.CharField(max_length=255, null=True)
+    request_country_name  = models.CharField(max_length=255, null=True)
     request_city  = models.CharField(max_length=255, null=True)
-    request_state  = models.CharField(max_length=255, null=True)
+    request_region_name = models.CharField(max_length=255, null=True)
     request_latitude = models.CharField(max_length=255, null=True)
     request_longitude = models.CharField(max_length=255, null=True)
     request_referer = models.CharField(max_length=255, null=True)
@@ -39,6 +41,20 @@ class Domain(models.Model):
     encoding = models.CharField( max_length=20,null=True)
     full_html = models.TextField()
     content = models.TextField()
+
+    has_robots_txt = models.BooleanField()
+    has_sitemap_xml = models.BooleanField()
+    www_resolve = models.BooleanField()
+
+    w3c_markup_errors = models.IntegerField()
+    w3c_markup_warnings = models.IntegerField()
+    w3c_css_errors = models.IntegerField()
+    w3c_css_warnings =models.IntegerField()
+
+
+    google_indexed=models.IntegerField()
+    google_back_links =models.IntegerField()
+    dmoz_indexed = models.BooleanField()
 
     def __unicode__(self):
         return self.domain

@@ -11,7 +11,7 @@ def w3c_markup_check(domain):
     request.get_method = lambda : 'HEAD'
     response = urllib2.urlopen(request)
 
-    result = {}
+    result = {'X-W3C-Validator-Errors':0, 'X-W3C-Validator-Warnings':0, 'valid':False }
 
     valid = response.info().getheader('X-W3C-Validator-Status')
     if valid == "Valid":
@@ -36,6 +36,7 @@ def w3c_css_check(domain):
     response = urllib2.urlopen(request)
 
     result = {}
+    result = {'X-W3C-Validator-Errors':0, 'X-W3C-Validator-Warnings':0, 'valid':False }
     valid = response.info().getheader('X-W3C-Validator-Status')
     if valid == "Valid":
         result['valid'] =  True

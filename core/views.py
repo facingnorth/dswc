@@ -1,10 +1,6 @@
 # Create your views here.
-import datetime
 import logging
-from django.db import connections
-from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render
-from core.markupservice import extract_seo_facts
 from core.models import Domain, NameServer, SeoImage, SeoHeading
 from service import *
 
@@ -37,32 +33,39 @@ def view(request, d):
                                           "recent_domains":get_random_domain_checks(NUMBER_OF_RECENT_SEARCH)})
 
 
+# the ip must be resolvable and site must be accssible at the time
 def search(request, d=None):
+
     if d is None:
-        d = request.REQUEST['domain'] #todo to lower
+        d = request.REQUEST.get('domain') #todo to lower
+        if d is None:
+            return render(request, 'index.html', {"error": "domain name cannot be empty"},)
+
 
     d = extract_domain_name(d)
     ip = is_domain_valid(d)
 
     if ip is None:
-        return render(request, 'index.html', {"error": "this is not valid site!"},)
+        return render(request, 'index.html', {"error": "domain name is invalid"},)
 
+    headers = get_http_headers(d) ##check whether the site is up
+
+    if headers is None:
+        return render(request, 'index.html', {"error": "website is down"},)
 
     seo_dict=None
-    headers = get_http_headers(d)
- 
+
     domain = Domain()
     domain.domain = d
-
     domain.set_all_archived() ##clean up all existing ones
-
     domain.ip = ip
 
 
     geo_record = get_geo_record(domain.ip)
     domain.city = geo_record['city']
-    domain.state = geo_record.get("region_name")
+    domain.region_name = geo_record.get("region_name")
     domain.country_code = geo_record['country_code']
+    domain.country_name = geo_record['country_name']
     domain.longitude = geo_record['longitude']
     domain.latitude = geo_record['latitude']
 
@@ -81,9 +84,35 @@ def search(request, d=None):
     
     if client_geo_record is not None:
         domain.request_country_code =  client_geo_record['country_code']
+        domain.request_country_name =  client_geo_record['country_name']
+        domain.request_region_name =  client_geo_record['region_name']
         domain.request_city =  client_geo_record['city']
         domain.request_latitude =  client_geo_record['latitude']
         domain.request_longitude =  client_geo_record['longitude']
+
+
+    from core.dmoz_service import dmoz_indexed
+    domain.dmoz_indexed = dmoz_indexed(domain.domain)
+
+    from core.markup_service import *
+    domain.has_robots_txt = has_robots_txt(domain.domain)
+    domain.has_sitemap_xml = has_sitemap_xml(domain.domain)
+    domain.www_resolve = www_resolve(domain.domain)
+
+
+    import core.w3c_service
+    domain.w3c_markup_errors = core.w3c_service.w3c_markup_check(domain.domain)['X-W3C-Validator-Errors']
+    domain.w3c_markup_warnings = core.w3c_service.w3c_markup_check(domain.domain)['X-W3C-Validator-Warnings']
+
+    domain.w3c_css_errors = core.w3c_service.w3c_css_check(domain.domain)['X-W3C-Validator-Errors']
+    domain.w3c_css_warnings = core.w3c_service.w3c_css_check(domain.domain)['X-W3C-Validator-Warnings']
+
+
+    import core.google_service
+    domain.google_back_links= core.google_service.google_backlinks(domain.domain)
+    domain.google_indexed= core.google_service.google_indexed(domain.domain)
+
+
 
     domain.save()
 
@@ -122,7 +151,6 @@ def search(request, d=None):
 
                     
     name_servers = get_ns_record(domain.domain)
-    print name_servers
     for v in name_servers:
         ns = NameServer()
         ns.hostname = v
@@ -134,20 +162,14 @@ def search(request, d=None):
 
     mail_servers = get_mx_record(domain.domain)
     for mx in mail_servers:
-        print mx
         mx.domain  = domain
         mx.save()
-
 
 
     mx_servers = domain.mxserver_set.all(),
     name_servers = domain.nameserver_set.all()
 
-    from django.db import connection
-    connections.queries = []
-    print connections.queries
-
     return render(request, 'index.html', {"domain": domain, "name_servers": name_servers,
-                                          "mail_servers": mx_servers,
+                                          "mail_servers": mail_servers,
                                           "seo_dict": seo_dict,
                                           "recent_domains":get_latest_n_domain_checks(NUMBER_OF_RECENT_SEARCH)})

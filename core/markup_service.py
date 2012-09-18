@@ -98,9 +98,9 @@ def www_resolve(domain):
         obj = opener.open(request)
 
         if obj.status in (301, 302):
-            return "Yes"
+            return True
         else:
-            return "Failed"
+            return False
 
 
 
@@ -132,7 +132,10 @@ def extract_seo_facts(url):
     for i in range(6):
         headings = soup.findAll("h%s" % i)
         for h in headings:
-            dict['h%s' % i] = h.string
+            if dict.get('h%s' % i) is None:
+                dict['h%s' % i] = []
+            dict['h%s' % i] =dict['h%s' % i].append(h.string)
+
 
     dict['images']  = soup.findAll("img")
 
@@ -149,10 +152,11 @@ def extract_seo_facts(url):
     #for word, frequency in top_words:
     #    print("%s %d" % (word, frequency))
 
+extract_seo_facts("www.netregistry.com.au")
 
 #print soup.meta['http-equiv']
 #
-#/usr/bin/python /home/wtao/dswc/core/markupservice.py
+#/usr/bin/python /home/wtao/dswc/core/markup_service.py
 #[u'DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"', u'\n', <html xmlns="http://www.w3.org/1999/xhtml">
 #<head>
 #<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
