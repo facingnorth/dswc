@@ -32,7 +32,7 @@ def has_robots_txt(domain):
         if response.code==200:
             return True
     except urllib2.HTTPError ,e:
-        print e
+        logger.info(e)
         return False
 
 
@@ -49,7 +49,7 @@ def has_sitemap_xml(domain):
         if response.code==200:
             return True
     except urllib2.HTTPError ,e:
-        print e
+        logger.info(e)
         return False
 
 
@@ -89,7 +89,6 @@ def www_resolve(domain):
     try:
         response = urllib2.urlopen(request)
         response.read()
-        print response.code
         if response.code==200:
             return "No"
     except urllib2.HTTPError ,e:
@@ -139,6 +138,23 @@ def extract_seo_facts(url):
 
     dict['images']  = soup.findAll("img")
 
+
+    forms = soup.findAll("form")
+    if forms is not None and len(forms)>0:
+        dict['conversion_forms'] = True
+    else:
+        dict['conversion_forms'] = False
+
+    dict['number_of_js_file'] = 0
+    scriptlets = soup.findAll("script")
+    for script in scriptlets:
+        if script.get("src") is not None:
+            dict['number_of_js_file'] += 1
+        else:
+            if "_gaq.push" in script.text:
+                dict['google_analytics'] = True
+
+
     #http://stackoverflow.com/questions/1936466/beautifulsoup-grab-visible-webpage-text
     texts = soup.findAll(text=True)
     text_content = (str(filter(visible,texts)))
@@ -147,22 +163,4 @@ def extract_seo_facts(url):
 
     return dict
 
-    #top_words = Counter(text_content.split()).most_common(10)
-
-    #for word, frequency in top_words:
-    #    print("%s %d" % (word, frequency))
-
-extract_seo_facts("www.netregistry.com.au")
-
-#print soup.meta['http-equiv']
-#
-#/usr/bin/python /home/wtao/dswc/core/markup_service.py
-#[u'DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"', u'\n', <html xmlns="http://www.w3.org/1999/xhtml">
-#<head>
-#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-#<meta name="robots" content="index,follow" />
-#<meta name="keywords" content="psd to html, psd to wordpress, wordpress, wordpress theme, wordpress development, css, xhtml, markup, table-less, html slicing, xhtml slicing, html production, xhtml production, semantic coding, table-less html, table-less xhtml, shorthand css, css, xhtml strict, xhtml transitional, convert design to html, convert psd to html, convert image to html, convert png to html, slice psd, convert psd to xhtml, convert image to xhtml, convert png to xhtml" />
-#<meta name="description" content="XhtmlWeaver provides PSD to HTML and WordPress service, gives graphic designers and design agencies the ability to provide a full web design offering without having to learn any programming skills." />
-#<meta name="google-site-verification" content="44hD87z5TCfLZORuxc4Y0whXru5A_eS4DnIRKHI8nnE" />
-#<title>PSD to HTML | PSD to WordPress | Design to HTML  | XhtmlWeaver | Sydney, Australia</title>
-#<script type="text/javascript" src="/scripts/googlewebfont.js"></script>
+extract_seo_facts("www.xhtmlweaver.com")

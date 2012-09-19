@@ -168,8 +168,11 @@ def search(request, d=None):
 
     mx_servers = domain.mxserver_set.all(),
     name_servers = domain.nameserver_set.all()
+    images = domain.seoimage_set.all()
+
 
     return render(request, 'index.html', {"domain": domain, "name_servers": name_servers,
                                           "mail_servers": mail_servers,
+                                          "images": images,
                                           "seo_dict": seo_dict,
                                           "recent_domains":get_latest_n_domain_checks(NUMBER_OF_RECENT_SEARCH)})

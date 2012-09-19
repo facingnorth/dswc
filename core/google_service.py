@@ -1,9 +1,18 @@
+import logging
+import urllib
+
+logger = logging.getLogger(__name__)
+
 
 def google_backlinks(domain):
+    logger.info("begin google_backlinks for domain %s" % domain)
     import urllib2
     from BeautifulSoup import BeautifulSoup
     #from http://stackoverflow.com/questions/802134/changing-user-agent-on-urllib2-urlopen
-    url = "https://www.google.com/search?q=%22{0}%22-site:{1}".format(domain,domain)
+    url = "https://www.google.com/search?q=%s".format(domain,domain)
+    keyword = '"{0}" -site:{1}'.format(domain,domain)
+    url = (url % urllib.quote_plus(keyword))
+    logger.info(url)
     headers = { 'User-Agent' : 'Mozilla/5.0' }
     req = urllib2.Request(url, None, headers)
     html = urllib2.urlopen(req).read()
@@ -11,28 +20,37 @@ def google_backlinks(domain):
     soup = BeautifulSoup(html)
     soup.prettify()
     result =soup.find("div",{"id": "resultStats"}).string
-    print result
-    result = result.lower().replace("about ","")
-    result = result.replace(" results","")
-    result = result.replace(',','')
+    logger.info("Results %s" %  result)
+    if result:
+        result = result.lower().replace("about ","")
+        result = result.replace(" results","")
+        result = result.replace(',','')
+    else:
+        result= 0
+
+    logger.info("google_backlinks domain %s results %s" % (domain, result))
     return result
 
 def google_indexed(domain):
+    logger.info("begin google_indexed for domain %s" % domain)
     import urllib2
     from BeautifulSoup import BeautifulSoup
     #from http://stackoverflow.com/questions/802134/changing-user-agent-on-urllib2-urlopen
     url = "https://www.google.com/search?q=site:{1}".format(domain,domain)
-    headers = { 'User-Agent' : 'Mozilla/5.0' }
+    logger.info(url)
+    headers = { 'User-Agent' : 'Mozilla/5.0'}
     req = urllib2.Request(url, None, headers)
     html = urllib2.urlopen(req).read()
-
     soup = BeautifulSoup(html)
     soup.prettify()
     result =soup.find("div",{"id": "resultStats"}).string
-    print result
-    result = result.lower().replace("about ","")
-    result = result.replace(" results","")
-    result = result.replace(',','')
-    return result
+    logger.info("Results %s" %  result)
+    if result:
+        result = result.lower().replace("about ","")
+        result = result.replace(" results","")
+        result = result.replace(',','')
+    else:
+        result= 0
 
-print google_backlinks("netregistry.com.au")
+    logger.info("google_indexed domain %s results %s" % (domain, result))
+    return result

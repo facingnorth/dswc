@@ -1,12 +1,16 @@
 import urllib
 import urllib2
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 def w3c_markup_check(domain):
     URL = "http://validator.w3.org/check?uri=%s"
     SITE_URL = "http://{0}".format(domain)
     # pattern for HEAD request taken from
     # http://stackoverflow.com/questions/4421170/python-head-request-with-urllib2
+    logger.info("URL is %s" % URL % urllib.quote(SITE_URL) )
     request = urllib2.Request(URL % urllib.quote(SITE_URL))
     request.get_method = lambda : 'HEAD'
     response = urllib2.urlopen(request)
@@ -31,6 +35,8 @@ def w3c_css_check(domain):
     SITE_URL = "http://{0}".format(domain)
     # pattern for HEAD request taken from
     # http://stackoverflow.com/questions/4421170/python-head-request-with-urllib2
+    logger.info("URL is %s" % URL % urllib.quote(SITE_URL) )
+
     request = urllib2.Request(URL % urllib.quote(SITE_URL))
     request.get_method = lambda : 'HEAD'
     response = urllib2.urlopen(request)

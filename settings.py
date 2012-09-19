@@ -131,7 +131,8 @@ LOGGING = {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d  %(filename)s  %(lineno)d %(message)s'
         },
         'simple': {
-            'format': '%(levelname)s %(message)s'
+            #'format': '%(levelname)s %(message)s'
+            'format': '%(levelname)s %(filename)s  	%(funcName)s  %(lineno)d %(message)s '
         },
     },
     'handlers': {
@@ -141,6 +142,12 @@ LOGGING = {
             'formatter': 'verbose',         # define the formatter to associate
             'filename': os.path.join(SITE_ROOT, 'log', 'log.log') # log file
         },
+
+        'console':{
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
     },
     'loggers': {
         'core.views': {              # define a logger - give it a name
@@ -148,12 +155,18 @@ LOGGING = {
             'level': 'INFO',                 # specify the logging level
             'propagate': True,
         },
-
-        'django.db.backends': {
-            'handlers': ['file_core.views'], # specify what handler to associate
-            'level': 'DEBUG',                 # specify the logging level
+        'core': {              # define a logger - give it a name
+            'handlers': ['file_core.views','console'], # specify what handler to associate
+            'level': 'INFO',                 # specify the logging level
             'propagate': True,
         },
+
+
+#        'django.db.backends': {
+#            'handlers': ['file_core.views'], # specify what handler to associate
+#            'level': 'DEBUG',                 # specify the logging level
+#            'propagate': True,
+#        },
 
 
     }

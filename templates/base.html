@@ -30,9 +30,13 @@
         <div class="span2 offset4">Peek the site!</div>
     </div>
 
-    <div class="alert alert-error">
+
+    {% if error %}
+        <div class="alert alert-error">
     {{ error }}
-    </div>
+        </div>
+    {% endif %}
+
     <div class="row">
         <div class="span6 offset3">
             <form class="form-search" action="/search" method="post">

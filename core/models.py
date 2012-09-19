@@ -56,6 +56,9 @@ class Domain(models.Model):
     google_back_links =models.IntegerField()
     dmoz_indexed = models.BooleanField()
 
+    #number_of_js_file = models.IntegerField()
+    #using_analytics = models.BooleanField()
+
     def __unicode__(self):
         return self.domain
 
@@ -65,7 +68,7 @@ class Domain(models.Model):
         cursor = connection.cursor()
 
         # Data modifying operation - commit required
-        cursor.execute("UPDATE core_domain SET archived = now() WHERE domain = %s", [self.domain])
+        cursor.execute("UPDATE core_domain SET archived = now() WHERE domain = %s and archived is NULL", [self.domain])
         transaction.commit_unless_managed()
 
 
@@ -76,6 +79,11 @@ class SeoImage(models.Model):
     title = models.CharField(max_length=1000,null=True)
     
     domain = models.ForeignKey(Domain)
+
+    def alt_missing(self):
+        return self.alt is None
+
+
 
 
 

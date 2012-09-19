@@ -21,9 +21,9 @@
         <div class="span9 offset1">
             <h5>Site Details</h5>
             <ul>
-                <li><strong>Domain: </strong>{{ domain.domain }}</li>
-                <li><strong>Server: </strong>{{ domain.server|default:"Unknown" }} <small>{{ domain.x_powered_by |default:""}}</small></li>
-                <li><strong>IP: </strong>{{ domain.ip }}</li>
+                <li><strong>Domain Name: </strong>{{ domain.domain }}</li>
+                <li><strong>Web Server: </strong>{{ domain.server|default:"Unknown" }} <small>{{ domain.x_powered_by |default:""}}</small></li>
+                <li><strong>IP Address: </strong>{{ domain.ip }}</li>
                 <li><strong>Hosted by: </strong>
                     {% if domain.isp == "Linode" %}
                     <a href="http://www.linode.com/?r=148ac8327204f3f61c76690e7faa709611384a24" target="_blank">{{ domain.isp }}</a>
@@ -62,13 +62,13 @@
 
 
 
-                <li><strong>Has robots.txt: </strong>{{ domain.has_robots_txt }}</li>
-                <li><strong>Has sitemap.xml: </strong>{{ domain.has_sitemap_xml }}</li>
-                <li><strong>www resolve: </strong>{{ domain.www_resolve }}</li>
+                <li><strong>Has robots.txt: </strong>{{ domain.has_robots_txt |yesno}}</li>
+                <li><strong>Has sitemap.xml: </strong>{{ domain.has_sitemap_xml|yesno }}</li>
+                <li><strong>www resolve: </strong>{{ domain.www_resolve|yesno }}</li>
 
 
 
-                <li><strong>Dmoz indexed: </strong><a href="http://www.dmoz.org/search/?q={{ domain.domain }}" rel="nofollow">{{ domain.dmoz_indexed }}</a></li>
+                <li><strong>Dmoz indexed: </strong><a href="http://www.dmoz.org/search/?q={{ domain.domain }}" rel="nofollow">{{ domain.dmoz_indexed |yesno}}</a></li>
 
                 <li><strong>Google Back Links: </strong>
                     <a href="https://www.google.com/search?q=%22{{ domain.domain }}%22-site:{{ domain.domain }}"  rel="nofollow">
@@ -80,8 +80,16 @@
                 <li><strong>Google Page Rank: </strong>{{ domain.page_rank }}</li>
                 <li><strong>Alexa: </strong>{{ domain.alexa_rank |intcomma}}</li>
             </ul>
+          {% endif %}
 
-            {% endif %}
+            <h5>Images</h5>
+          {% if images %}
+            <ul>
+            {% for image in images %}
+               <li>{{ image.src }} {{ image.alt  }} </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
 
 
 
