@@ -4,7 +4,7 @@ import logging
 import re
 import urllib2
 
-dict = {}
+
 
 logger = logging.getLogger(__name__)
 def visible(element):
@@ -105,6 +105,7 @@ def www_resolve(domain):
 
 
 def extract_seo_facts(url):
+    dict = {}
     #todo make sure it works for http and https
     url = "http://" + url
     logger.info("extracting seo facts for url %s" % url)
@@ -128,12 +129,18 @@ def extract_seo_facts(url):
             dict['description'] = m.get('content')
 
 
+
     for i in range(6):
-        headings = soup.findAll("h%s" % i)
+        if i is None:
+            i=0
+        heading_label = "h%s" % (i+1) ##start from h1
+        headings = soup.findAll(heading_label)
         for h in headings:
-            if dict.get('h%s' % i) is None:
-                dict['h%s' % i] = []
-            dict['h%s' % i] =dict['h%s' % i].append(h.string)
+            if dict.get(heading_label) is None:
+                dict[heading_label] = list()
+                dict[heading_label].append(h.string)
+            else:
+                dict[heading_label].append(h.string)
 
 
     dict['images']  = soup.findAll("img")
@@ -141,18 +148,18 @@ def extract_seo_facts(url):
 
     forms = soup.findAll("form")
     if forms is not None and len(forms)>0:
-        dict['conversion_forms'] = True
+        dict['has_conversion_form'] = True
     else:
-        dict['conversion_forms'] = False
+        dict['has_conversion_form'] = False
 
-    dict['number_of_js_file'] = 0
+    dict['num_of_js_files'] = 0
     scriptlets = soup.findAll("script")
     for script in scriptlets:
         if script.get("src") is not None:
-            dict['number_of_js_file'] += 1
+            dict['num_of_js_files'] += 1
         else:
             if "_gaq.push" in script.text:
-                dict['google_analytics'] = True
+                dict['using_google_analytics'] = True
 
 
     #http://stackoverflow.com/questions/1936466/beautifulsoup-grab-visible-webpage-text
@@ -162,5 +169,3 @@ def extract_seo_facts(url):
     dict['text_content'] =text_content
 
     return dict
-
-extract_seo_facts("www.xhtmlweaver.com")

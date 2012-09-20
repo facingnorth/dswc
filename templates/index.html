@@ -92,6 +92,56 @@
           {% endif %}
 
 
+            <h5>Usability</h5>
+            <ul>
+                <li>number of javascript files referenced: {{ domain.num_of_js_files }}</li>
+                <li>using google analytics: {{ domain.using_google_analytics |yesno }}</li>
+                <li>has conversion form: {{ domain.has_conversion_form |yesno }}</li>
+            </ul>
+
+
+            <h5>HTML Headings</h5>
+            <h6>H1</h6>
+            <ul>
+                {% for h1 in seo_dict.h1 %}
+                    <li>{{ h1 }}</li>
+                {% endfor %}
+            </ul>
+
+            <h6>H2</h6>
+            <ul>
+                {% for h2 in seo_dict.h2 %}
+                    <li>{{ h2 }}</li>
+                {% endfor %}
+            </ul>
+
+            <h6>H3</h6>
+            <ul>
+                {% for h3 in seo_dict.h3 %}
+                    <li>{{ h3 }}</li>
+                {% endfor %}
+            </ul>
+
+            <h6>H4</h6>
+            <ul>
+                {% for h4 in seo_dict.h4 %}
+                    <li>{{ h4 }}</li>
+                {% endfor %}
+            </ul>
+
+            <h6>H5</h6>
+            <ul>
+                {% for h5 in seo_dict.h1 %}
+                    <li>{{ h5 }}</li>
+                {% endfor %}
+            </ul>
+            <h6>H6</h6>
+            <ul>
+                {% for h6 in seo_dict.h1 %}
+                    <li>{{ h6 }}</li>
+                {% endfor %}
+            </ul>
+
 
         </div>
     </div>

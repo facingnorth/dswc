@@ -35,7 +35,6 @@ def view(request, d):
 
 # the ip must be resolvable and site must be accssible at the time
 def search(request, d=None):
-
     if d is None:
         d = request.REQUEST.get('domain') #todo to lower
         if d is None:
@@ -81,7 +80,7 @@ def search(request, d=None):
     domain.request_ip = request.META['REMOTE_ADDR']
     domain.request_user_agent  = request.META['HTTP_USER_AGENT']
     domain.request_referer = request.META.get('HTTP_REFERER')
-    
+
     if client_geo_record is not None:
         domain.request_country_code =  client_geo_record['country_code']
         domain.request_country_name =  client_geo_record['country_name']
@@ -128,6 +127,12 @@ def search(request, d=None):
 
         domain.full_html = seo_dict.get('source')
         domain.content = seo_dict.get('text_content')
+
+        domain.has_conversion_form = seo_dict.get("has_conversion_form")
+        domain.num_of_js_files = seo_dict.get("num_of_js_files")
+        domain.using_google_analytics = seo_dict.get("using_google_analytics")
+
+
         domain.save()
 
         if seo_dict.get("images"):
@@ -143,13 +148,16 @@ def search(request, d=None):
         for i in range(6):
             if seo_dict.get("h%s" % i):
                 for heading in seo_dict.get("h%s" % i ):
+                    print "heading" + heading
                     h = SeoHeading()
                     h.content = heading
                     h.level = i
                     h.domain = domain
                     h.save()
 
-                    
+
+
+
     name_servers = get_ns_record(domain.domain)
     for v in name_servers:
         ns = NameServer()

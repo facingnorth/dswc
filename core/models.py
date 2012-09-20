@@ -56,8 +56,11 @@ class Domain(models.Model):
     google_back_links =models.IntegerField()
     dmoz_indexed = models.BooleanField()
 
-    #number_of_js_file = models.IntegerField()
-    #using_analytics = models.BooleanField()
+
+    has_conversion_form = models.NullBooleanField(null=True)
+    num_of_js_files = models.IntegerField(null=True)
+    using_google_analytics = models.NullBooleanField(null=True)
+
 
     def __unicode__(self):
         return self.domain
@@ -111,6 +114,10 @@ class MXServer(models.Model):
     priority =  models.IntegerField()
 
     domain = models.ForeignKey(Domain)
+
+class Redirection(models.Model):
+    key = models.CharField(max_length=800, unique=True)
+    short_url = models.CharField(max_length=800)
 
 #class Person(models.Model):
 #    first_name = models.CharField(max_length=30)
