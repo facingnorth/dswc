@@ -22,13 +22,17 @@
             <h5>Site Details</h5>
             <ul>
                 <li><strong>Domain Name: </strong>{{ domain.domain }}</li>
-                <li><strong>Web Server: </strong>{{ domain.server|default:"Unknown" }} <small>{{ domain.x_powered_by |default:""}}</small></li>
+                {% if domain.server %}
+                <li><strong>Web Server: </strong>{{ domain.server|default:"Unknown" }} </li>
+                {% endif %}
+
+
                 <li><strong>IP Address: </strong>{{ domain.ip }}</li>
                 <li><strong>Hosted by: </strong>
                     {% if domain.isp == "Linode" %}
-                    <a href="http://www.linode.com/?r=148ac8327204f3f61c76690e7faa709611384a24" target="_blank">{{ domain.isp }}</a>
+                    <a href="http://goo.gl/MnEC8" target="_blank">{{ domain.isp }}</a>
                     {% elif domain.isp == "New Dream Network, LLC"  %}
-                    <a href="http://www.dreamhost.com/r.cgi?611717" target="_blank">{{ domain.isp }}</a>
+                    <a href="http://goo.gl/etVsT" target="_blank">{{ domain.isp }}</a>
                     {% else %}
                     <a href="http://www.google.com.au/search?q={{ domain.isp }}&ie=utf-8&oe=utf-8&client=ubuntu&channel=fs&redir_esc=&ei=LGs9UInXHcuviQferIHwBA" target="_blank">{{ domain.isp }}</a>
                     {% endif %}
@@ -62,8 +66,16 @@
 
 
 
-                <li><strong>Has robots.txt: </strong>{{ domain.has_robots_txt |yesno}}</li>
-                <li><strong>Has sitemap.xml: </strong>{{ domain.has_sitemap_xml|yesno }}</li>
+                <li><strong>Has robots.txt: </strong>{{ domain.has_robots_txt |yesno}}
+                    {% if domain.has_robots_txt %}
+                        &nbsp;<a href="http://{{ domain.domain }}/robots.txt">robots.txt</a>
+                    {% endif %}
+                </li>
+                <li><strong>Has sitemap.xml: </strong>{{ domain.has_sitemap_xml|yesno }}
+                    {% if domain.has_sitemap_xml %}
+                        &nbsp;<a href="http://{{ domain.domain }}/sitemap.xml">sitemap.xml</a>
+                    {% endif %}
+                </li>
                 <li><strong>www resolve: </strong>{{ domain.www_resolve|yesno }}</li>
 
 
@@ -77,19 +89,21 @@
                 </li>
                 <li><strong>Google Indexed: </strong><a href="https://www.google.com/search?q=site:{{ domain.domain }}"  rel="nofollow">{{ domain.google_indexed |intcomma}}</a></li>
 
-                <li><strong>Google Page Rank: </strong>{{ domain.page_rank }}</li>
+                <li><strong>Google Page Rank: </strong>{{ domain.page_rank }}/10</li>
                 <li><strong>Alexa: </strong>{{ domain.alexa_rank |intcomma}}</li>
             </ul>
           {% endif %}
 
-            <h5>Images</h5>
-          {% if images %}
+          <h5>Images Referenced (by using img tag)</h5>
+
             <ul>
             {% for image in images %}
-               <li>{{ image.src }} {{ image.alt  }} </li>
-              {% endfor %}
+               <li>{{ image.src }} {{ image.alt|default:"Missing"}} </li>
+            {% empty %}
+                <li>No image found</li>
+            {% endfor %}
             </ul>
-          {% endif %}
+
 
 
             <h5>Usability</h5>
@@ -101,48 +115,61 @@
 
 
             <h5>HTML Headings</h5>
-            <h6>H1</h6>
+            <h6>H1 Heading</h6>
             <ul>
                 {% for h1 in seo_dict.h1 %}
                     <li>{{ h1 }}</li>
+                {% empty %}
+                    <li>no h1 tag found</li>
                 {% endfor %}
             </ul>
 
-            <h6>H2</h6>
+            <h6>H2 Heading</h6>
             <ul>
                 {% for h2 in seo_dict.h2 %}
                     <li>{{ h2 }}</li>
+                {% empty %}
+                    <li>no h2 tag found</li>
                 {% endfor %}
             </ul>
 
-            <h6>H3</h6>
+            <h6>H3 Heading</h6>
             <ul>
                 {% for h3 in seo_dict.h3 %}
                     <li>{{ h3 }}</li>
+                {% empty %}
+                    <li>no h3 tag found</li>
                 {% endfor %}
             </ul>
 
-            <h6>H4</h6>
+            <h6>H4 Heading</h6>
             <ul>
                 {% for h4 in seo_dict.h4 %}
                     <li>{{ h4 }}</li>
+                {% empty %}
+                    <li>no h4 tag found</li>
+
                 {% endfor %}
             </ul>
 
-            <h6>H5</h6>
+            <h6>H5 Heading</h6>
             <ul>
-                {% for h5 in seo_dict.h1 %}
+                {% for h5 in seo_dict.h5 %}
                     <li>{{ h5 }}</li>
+                {% empty %}
+                    <li>no h5 tag found</li>
+
                 {% endfor %}
             </ul>
-            <h6>H6</h6>
+            <h6>H6 Heading</h6>
             <ul>
-                {% for h6 in seo_dict.h1 %}
+                {% for h6 in seo_dict.h6 %}
                     <li>{{ h6 }}</li>
+                {% empty %}
+                    <li>no h6 tag found</li>
+
                 {% endfor %}
             </ul>
-
-
         </div>
     </div>
     {% endif %}

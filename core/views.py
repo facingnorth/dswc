@@ -1,6 +1,7 @@
 # Create your views here.
 import logging
 from django.shortcuts import render
+from django.db import transaction
 from core.models import Domain, NameServer, SeoImage, SeoHeading
 from service import *
 
@@ -33,7 +34,9 @@ def view(request, d):
                                           "recent_domains":get_random_domain_checks(NUMBER_OF_RECENT_SEARCH)})
 
 
+
 # the ip must be resolvable and site must be accssible at the time
+@transaction.commit_on_success
 def search(request, d=None):
     if d is None:
         d = request.REQUEST.get('domain') #todo to lower
@@ -144,11 +147,10 @@ def search(request, d=None):
                 image.domain = domain
                 image.save()
 
-
+        i = 0
         for i in range(6):
             if seo_dict.get("h%s" % i):
                 for heading in seo_dict.get("h%s" % i ):
-                    print "heading" + heading
                     h = SeoHeading()
                     h.content = heading
                     h.level = i

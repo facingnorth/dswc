@@ -87,6 +87,7 @@ def get_page_rank_rank(domain):
 
 
 def get_http_headers(domain):
+    logger.info("getting headers for domain %s" % domain)
     import httplib
     conn = httplib.HTTPConnection(domain)
     conn.timeout =30
@@ -94,7 +95,9 @@ def get_http_headers(domain):
         conn.request("HEAD", "/")
         res = conn.getresponse()
         status = str(res.status)
+        logger.info("res.status = %s" % status)
         if status.startswith("2") or status.startswith("3"):  #2xx or #3xx is OK response
+            logger.info("header %s" % res.getheaders())
             return res.getheaders()
         return None
     except Exception, e:

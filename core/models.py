@@ -52,8 +52,8 @@ class Domain(models.Model):
     w3c_css_warnings =models.IntegerField()
 
 
-    google_indexed=models.IntegerField()
-    google_back_links =models.IntegerField()
+    google_indexed=models.BigIntegerField()
+    google_back_links =models.BigIntegerField()
     dmoz_indexed = models.BooleanField()
 
 

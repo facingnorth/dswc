@@ -22,6 +22,8 @@ def google_backlinks(domain):
     result =soup.find("div",{"id": "resultStats"}).string
     logger.info("Results %s" %  result)
     if result:
+        if result=='1 result':
+            return 1
         result = result.lower().replace("about ","")
         result = result.replace(" results","")
         result = result.replace(',','')
@@ -46,6 +48,8 @@ def google_indexed(domain):
     result =soup.find("div",{"id": "resultStats"}).string
     logger.info("Results %s" %  result)
     if result:
+        if result=='1 result':
+            return 1
         result = result.lower().replace("about ","")
         result = result.replace(" results","")
         result = result.replace(',','')

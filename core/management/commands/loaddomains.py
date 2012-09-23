@@ -18,6 +18,6 @@ class Command(NoArgsCommand):
         c = Client(HTTP_USER_AGENT='Mozilla/5.0')
 
 
-        c.post("/search", {"domain":"test.com.au"})
+        c.post("/search", {"domain":"facebook.com"})
 
-        print "running"
+        print "done"
