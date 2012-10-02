@@ -17,7 +17,14 @@ class Command(NoArgsCommand):
         from django.test import Client
         c = Client(HTTP_USER_AGENT='Mozilla/5.0')
 
+        f = open("/tmp/domains.txt")
+        data = f.readlines()
 
-        c.post("/search", {"domain":"facebook.com"})
+        for x in data:
+            c.post("/search", {"domain":x})
+
+
+
+
 
         print "done"

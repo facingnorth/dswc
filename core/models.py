@@ -95,6 +95,10 @@ class SeoHeading(models.Model):
     content = models.CharField(max_length=1000,null=True)
     domain = models.ForeignKey(Domain)
 
+    def __unicode__(self):
+        return self.content
+
+
 #class SeoLink(models.Model):
 #    src = models.CharField(null=True)
 #    title = models.ForeignKey(Domain)

@@ -31,6 +31,13 @@ def view(request, d):
 
     return render(request, 'index.html', {"domain": domain, "view":True ,   "name_servers":domain.nameserver_set.all(),
                                           "mail_servers":domain.mxserver_set.all(),
+                                          "images": domain.seoimage_set.all(),
+                                          "h1_tags": domain.seoheading_set.all().filter(level=1),
+                                          "h2_tags": domain.seoheading_set.all().filter(level=2),
+                                          "h3_tags": domain.seoheading_set.all().filter(level=3),
+                                          "h4_tags": domain.seoheading_set.all().filter(level=4),
+                                          "h5_tags": domain.seoheading_set.all().filter(level=5),
+                                          "h6_tags": domain.seoheading_set.all().filter(level=6),
                                           "recent_domains":get_random_domain_checks(NUMBER_OF_RECENT_SEARCH)})
 
 
@@ -181,8 +188,16 @@ def search(request, d=None):
     images = domain.seoimage_set.all()
 
 
+
+    print "seo_dictseo_dictseo_dictseo_dict"
+    print seo_dict
     return render(request, 'index.html', {"domain": domain, "name_servers": name_servers,
                                           "mail_servers": mail_servers,
-                                          "images": images,
-                                          "seo_dict": seo_dict,
+                                          "images": domain.seoimage_set.all(),
+                                          "h1_tags": domain.seoheading_set.all().filter(level=1),
+                                          "h2_tags": domain.seoheading_set.all().filter(level=2),
+                                          "h3_tags": domain.seoheading_set.all().filter(level=3),
+                                          "h4_tags": domain.seoheading_set.all().filter(level=4),
+                                          "h5_tags": domain.seoheading_set.all().filter(level=5),
+                                          "h6_tags": domain.seoheading_set.all().filter(level=6),
                                           "recent_domains":get_latest_n_domain_checks(NUMBER_OF_RECENT_SEARCH)})

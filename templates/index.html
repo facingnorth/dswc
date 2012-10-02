@@ -42,7 +42,6 @@
                 <li><strong>Location: </strong>{{ domain.city }} {{ domain.region_name }} {{ domain.country_name }}</li>
             </ul>
 
-            {% if seo_dict %}
             <h5>Seo Facts</h5>
             <ul>
                 {% if domain.title %}
@@ -92,13 +91,13 @@
                 <li><strong>Google Page Rank: </strong>{{ domain.page_rank }}/10</li>
                 <li><strong>Alexa: </strong>{{ domain.alexa_rank |intcomma}}</li>
             </ul>
-          {% endif %}
+
 
           <h5>Images Referenced (by using img tag)</h5>
 
             <ul>
             {% for image in images %}
-               <li>{{ image.src }} {{ image.alt|default:"Missing"}} </li>
+               <li>{{ image.src }} {{ image.alt|default:"Missing alt tag"}} </li>
             {% empty %}
                 <li>No image found</li>
             {% endfor %}
@@ -117,8 +116,8 @@
             <h5>HTML Headings</h5>
             <h6>H1 Heading</h6>
             <ul>
-                {% for h1 in seo_dict.h1 %}
-                    <li>{{ h1 }}</li>
+                {% for h1_tag in h1_tags %}
+                    <li>{{ h1_tag }}</li>
                 {% empty %}
                     <li>no h1 tag found</li>
                 {% endfor %}
@@ -126,8 +125,8 @@
 
             <h6>H2 Heading</h6>
             <ul>
-                {% for h2 in seo_dict.h2 %}
-                    <li>{{ h2 }}</li>
+                {% for h2_tag in h2_tags %}
+                    <li>{{ h2_tag }}</li>
                 {% empty %}
                     <li>no h2 tag found</li>
                 {% endfor %}
@@ -135,8 +134,8 @@
 
             <h6>H3 Heading</h6>
             <ul>
-                {% for h3 in seo_dict.h3 %}
-                    <li>{{ h3 }}</li>
+                {% for h3_tag in h3_tags %}
+                    <li>{{ h3_tag }}</li>
                 {% empty %}
                     <li>no h3 tag found</li>
                 {% endfor %}
@@ -144,8 +143,8 @@
 
             <h6>H4 Heading</h6>
             <ul>
-                {% for h4 in seo_dict.h4 %}
-                    <li>{{ h4 }}</li>
+                {% for h4_tag in h4_tags %}
+                    <li>{{ h5_tag }}</li>
                 {% empty %}
                     <li>no h4 tag found</li>
 
@@ -154,8 +153,8 @@
 
             <h6>H5 Heading</h6>
             <ul>
-                {% for h5 in seo_dict.h5 %}
-                    <li>{{ h5 }}</li>
+                {% for h5_tag in h5_tags %}
+                    <li>{{ h5_tag }}</li>
                 {% empty %}
                     <li>no h5 tag found</li>
 
@@ -163,8 +162,8 @@
             </ul>
             <h6>H6 Heading</h6>
             <ul>
-                {% for h6 in seo_dict.h6 %}
-                    <li>{{ h6 }}</li>
+                {% for h6_tag in h6_tag %}
+                    <li>{{ h6_tag }}</li>
                 {% empty %}
                     <li>no h6 tag found</li>
 
