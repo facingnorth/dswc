@@ -4,6 +4,10 @@ import sys
 import os
 
 import logging
+from core.service import extract_domain_name
+
+logger = logging.getLogger(__name__)
+print logger.name
 
 class Command(NoArgsCommand):
 
@@ -14,21 +18,29 @@ class Command(NoArgsCommand):
         )
 
     def handle_noargs(self, **options):
+
         from core.models import Domain
         from core.views import search
-        print "running"
+        logger.info("custom command start running ")
         from django.test import Client
         c = Client(HTTP_USER_AGENT='Mozilla/5.0')
-
         f = open("/tmp/domains.txt")
         data = f.readlines()
 
-        for x in data:
+        for d in data:
             try:
-                c.post("/search", {"domain":x})
+                d = extract_domain_name(d)
+                domain = Domain.objects.all().filter(domain=d)
+                if domain:
+                    logger.info("%s has been found in system, skip" % d)
+                    continue
+
+                logger.info("start searching domain %s" % d)
+                c.post("/search", {"domain":d})
             except Exception, e :
-                print "===========%s fucked up" % x
+                logger.error("fucked up for domain %s" % d)
+                logger.error(e)
 
 
-        print "done"
+        logger.info("done")
 

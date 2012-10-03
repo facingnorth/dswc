@@ -144,6 +144,13 @@ LOGGING = {
             'filename': os.path.join(SITE_ROOT, 'log', 'log.log') # log file
         },
 
+        'file_core.script': {                # define and name a handler
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler', # set the logging class to log to a file
+            'formatter': 'verbose',         # define the formatter to associate
+            'filename': os.path.join(SITE_ROOT, 'log', 'script.log') # log file
+        },
+
         'console':{
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
@@ -161,6 +168,13 @@ LOGGING = {
             'level': 'INFO',                 # specify the logging level
             'propagate': True,
         },
+
+        'dswc': {              # define a logger - give it a name
+                               'handlers': ['file_core.script','console'], # specify what handler to associate
+                               'level': 'INFO',                 # specify the logging level
+                               'propagate': True,
+                               },
+
 
 
 #        'django.db.backends': {
