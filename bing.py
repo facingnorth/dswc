@@ -45,24 +45,34 @@ Click on Bing Search API. Then download the Bing API Schema Guide
 
 
 if __name__ == "__main__":
-    my_key = "api key"
+    my_key = "pGNe05nS2XVcrmn/LX9nmtBfB08M5F+U9K0oRHpEN0U="
     bing = BingSearchAPI(my_key)
 
     data = []
 
 
-
-    if len(data)<2000 :
+    j=0
+    while len(data)<2000 :
         params = {'ImageFilters':'"Face:Face"',
                   '$format': 'json',
-                  '$top': 200,
-                  #'skip': 0
+                  '$top': 20,
+                  #'$offset':(0+j)*20
+                  '$skip':(0+j)*20
         }
         x =  bing.search('web','sydney web design',params)
 
-        print x
+
         for foo in x[u'd'][u'results']:
             i=0
             for bar in foo:
                 print foo['Web'][i]['Url']
+                data.append(foo['Web'][i]['Url'])
                 i+=1
+
+        j+=1
+
+
+    dataset = set(data)
+    for xx in dataset:
+        print xx
+

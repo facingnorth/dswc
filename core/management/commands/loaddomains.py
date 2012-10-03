@@ -1,5 +1,9 @@
 from optparse import make_option
 from django.core.management.base import NoArgsCommand
+import sys
+import os
+
+import logging
 
 class Command(NoArgsCommand):
 
@@ -12,7 +16,6 @@ class Command(NoArgsCommand):
     def handle_noargs(self, **options):
         from core.models import Domain
         from core.views import search
-
         print "running"
         from django.test import Client
         c = Client(HTTP_USER_AGENT='Mozilla/5.0')
@@ -21,10 +24,11 @@ class Command(NoArgsCommand):
         data = f.readlines()
 
         for x in data:
-            c.post("/search", {"domain":x})
-
-
-
+            try:
+                c.post("/search", {"domain":x})
+            except Exception, e :
+                print "===========%s fucked up" % x
 
 
         print "done"
+

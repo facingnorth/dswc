@@ -21,7 +21,7 @@
         <div class="span9 offset1">
             <h5>Site Details</h5>
             <ul>
-                <li><strong>Domain Name: </strong>{{ domain.domain }}</li>
+                <li><strong>Domain Name: </strong> <a href="http://{{ domain.domain }}" target="_blank" rel="nofollow">{{ domain.domain }}</a></li>
                 {% if domain.server %}
                 <li><strong>Web Server: </strong>{{ domain.server|default:"Unknown" }} </li>
                 {% endif %}

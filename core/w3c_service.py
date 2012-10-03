@@ -15,11 +15,18 @@ def w3c_markup_check(domain):
     request.get_method = lambda : 'HEAD'
     response = urllib2.urlopen(request)
 
+
+
     result = {'X-W3C-Validator-Errors':0, 'X-W3C-Validator-Warnings':0, 'valid':False }
 
     valid = response.info().getheader('X-W3C-Validator-Status')
     if valid == "Valid":
         result['valid'] =  True
+    elif valid=='Abort':
+        result['valid'] =  False
+        result['X-W3C-Validator-Errors'] =   -1
+        result['X-W3C-Validator-Warnings'] =   -1
+        return result
     else:
         result['valid'] =  False
 

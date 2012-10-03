@@ -23,8 +23,9 @@ def index(request):
     return render(request, 'index.html', {"recent_domains":get_latest_n_domain_checks(NUMBER_OF_RECENT_SEARCH)},)
 
 def view(request, d):
+    logger.info("view view>>%s" % d)
     try:
-        domain = Domain.objects.all().filter(archived__isnull=True).get(domain__exact=d)
+        domain = Domain.objects.all().filter(archived__isnull=True).get(domain=d)
     except :
         return search(request, d)
 
@@ -39,6 +40,12 @@ def view(request, d):
                                           "h5_tags": domain.seoheading_set.all().filter(level=5),
                                           "h6_tags": domain.seoheading_set.all().filter(level=6),
                                           "recent_domains":get_random_domain_checks(NUMBER_OF_RECENT_SEARCH)})
+
+
+
+def archive(request):
+    domains = Domain.objects.all().filter(archived__isnull=True).order_by("-checked_at")
+    return render(request, 'archive.html', {"domains": domains})
 
 
 
@@ -135,8 +142,9 @@ def search(request, d=None):
         domain.keywords = seo_dict.get('keywords')
         domain.description = seo_dict.get('description')
 
-        domain.full_html = seo_dict.get('source')
-        domain.content = seo_dict.get('text_content')
+
+        #domain.full_html = (seo_dict.get('source')).encode("UTF-8", "ignore")
+        #domain.content = (seo_dict.get('text_content')).encode("UTF-8", "ignore")
 
         domain.has_conversion_form = seo_dict.get("has_conversion_form")
         domain.num_of_js_files = seo_dict.get("num_of_js_files")
@@ -183,14 +191,7 @@ def search(request, d=None):
         mx.save()
 
 
-    mx_servers = domain.mxserver_set.all(),
     name_servers = domain.nameserver_set.all()
-    images = domain.seoimage_set.all()
-
-
-
-    print "seo_dictseo_dictseo_dictseo_dict"
-    print seo_dict
     return render(request, 'index.html', {"domain": domain, "name_servers": name_servers,
                                           "mail_servers": mail_servers,
                                           "images": domain.seoimage_set.all(),
@@ -201,3 +202,6 @@ def search(request, d=None):
                                           "h5_tags": domain.seoheading_set.all().filter(level=5),
                                           "h6_tags": domain.seoheading_set.all().filter(level=6),
                                           "recent_domains":get_latest_n_domain_checks(NUMBER_OF_RECENT_SEARCH)})
+
+
+

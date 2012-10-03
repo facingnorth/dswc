@@ -15,6 +15,7 @@ urlpatterns = patterns('',
         (r'^admin/', include(admin.site.urls)),
         (r'^$', "core.views.index"),
         (r'^search$', "core.views.search"),
+        (r'^archive', "core.views.archive"),
         url(r'^view/(?P<d>.+)/$', 'core.views.view',name="view_domain"),
     
 
