@@ -5,7 +5,7 @@ from django.db import transaction
 from core.models import Domain, NameServer, SeoImage, SeoHeading
 from service import *
 
-NUMBER_OF_RECENT_SEARCH = 15
+NUMBER_OF_RECENT_SEARCH = 40
 
 logger = logging.getLogger(__name__)
 

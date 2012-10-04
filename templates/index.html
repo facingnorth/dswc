@@ -20,6 +20,7 @@
     <div class="row">
         <div class="span9 offset1">
             <h5>Site Details</h5>
+            <div><a href="http://{{ domain.domain }}" target="_blank" rel="nofollow"><img src="http://open.thumbshots.org/image.pxf?url=http://{{ domain.domain }}" alt="{{ domain.domain }}" /></a></div>
             <ul>
                 <li><strong>Domain Name: </strong> <a href="http://{{ domain.domain }}" target="_blank" rel="nofollow">{{ domain.domain }}</a></li>
                 {% if domain.server %}
@@ -204,7 +205,7 @@
 
 
     <div class="row">
-        <div class="span4 offset1">
+        <div class="span9 offset1">
             <h5>Recent Searches</h5>
             <ul>
             {% for d in recent_domains %}
