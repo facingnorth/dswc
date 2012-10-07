@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load humanize %}
+{% load pagination_tags %}
 
 
 {% block content %}
@@ -15,6 +16,7 @@
         <th>Page Rank</th>
     </tr>
 </thead>
+    {% autopaginate domains %}
     {% for d in domains %}
         <tr>
             {% url 'view_domain' d.domain as the_url %}
@@ -34,6 +36,10 @@
         </tr>
     {% empty %}
         <li>Sorry, no domains in this list!</li>
+
     {% endfor %}
+
+
 </table>
+    {% paginate %}
 {% endblock %}

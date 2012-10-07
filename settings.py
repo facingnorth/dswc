@@ -81,6 +81,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
+    'django.middleware.doc.XViewMiddleware',
+    'pagination.middleware.PaginationMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -90,6 +92,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
+    'django.core.context_processors.request',
 )
 
 ROOT_URLCONF = 'dswc.urls'
@@ -115,6 +118,7 @@ INSTALLED_APPS = (
      "django.contrib.staticfiles",
      'django.contrib.humanize',
      'gunicorn',
+     'pagination',
 )
 
 STATIC_ROOT= os.path.join(SITE_ROOT,"static")
