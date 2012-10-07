@@ -31,11 +31,11 @@
                 <li><strong>IP Address: </strong>{{ domain.ip }}</li>
                 <li><strong>Hosted by: </strong>
                     {% if domain.isp == "Linode" %}
-                    <a href="http://goo.gl/MnEC8" target="_blank">{{ domain.isp }}</a>
+                    <a href="http://goo.gl/MnEC8" target="_blank" rel="nofollow">{{ domain.isp }}</a>
                     {% elif domain.isp == "New Dream Network, LLC"  %}
-                    <a href="http://goo.gl/etVsT" target="_blank">{{ domain.isp }}</a>
+                    <a href="http://goo.gl/etVsT" target="_blank" rel="nofollow">{{ domain.isp }}</a>
                     {% else %}
-                    <a href="http://www.google.com.au/search?q={{ domain.isp }}&ie=utf-8&oe=utf-8&client=ubuntu&channel=fs&redir_esc=&ei=LGs9UInXHcuviQferIHwBA" target="_blank">{{ domain.isp }}</a>
+                    <a href="http://www.google.com.au/search?q={{ domain.isp }}&ie=utf-8&oe=utf-8&client=ubuntu&channel=fs&redir_esc=&ei=LGs9UInXHcuviQferIHwBA" target="_blank" rel="nofollow">{{ domain.isp }}</a>
                     {% endif %}
 
                 </li>
@@ -68,12 +68,12 @@
 
                 <li><strong>Has robots.txt: </strong>{{ domain.has_robots_txt |yesno}}
                     {% if domain.has_robots_txt %}
-                        &nbsp;<a href="http://{{ domain.domain }}/robots.txt">robots.txt</a>
+                        &nbsp;<a href="http://{{ domain.domain }}/robots.txt" rel="nofollow">robots.txt</a>
                     {% endif %}
                 </li>
                 <li><strong>Has sitemap.xml: </strong>{{ domain.has_sitemap_xml|yesno }}
                     {% if domain.has_sitemap_xml %}
-                        &nbsp;<a href="http://{{ domain.domain }}/sitemap.xml">sitemap.xml</a>
+                        &nbsp;<a href="http://{{ domain.domain }}/sitemap.xml" rel="nofollow">sitemap.xml</a>
                     {% endif %}
                 </li>
                 <li><strong>www resolve: </strong>{{ domain.www_resolve|yesno }}</li>
@@ -180,7 +180,7 @@
             <h5>Name Servers</h5>
             <ul>
                 {% for ns in name_servers %}
-                    <li>{{ ns.hostname }} hosted by <a href="http://www.google.com.au/search?q={{ ns.isp }}&ie=utf-8&oe=utf-8&client=ubuntu&channel=fs&redir_esc=&ei=LGs9UInXHcuviQferIHwBA" target="_blank">{{ ns.isp }}</a></li>
+                    <li>{{ ns.hostname }} hosted by <a href="http://www.google.com.au/search?q={{ ns.isp }}&ie=utf-8&oe=utf-8&client=ubuntu&channel=fs&redir_esc=&ei=LGs9UInXHcuviQferIHwBA" target="_blank" rel="nofollow">{{ ns.isp }}</a></li>
                 {% empty %}
                     No Name Server Found
                 {% endfor %}
@@ -196,7 +196,7 @@
             <h5>Mail Servers</h5>
             <ul>
                 {% for mx in mail_servers %}
-                    <li>{{ mx.hostname }} hosted by  <a href="http://www.google.com.au/search?q={{ mx.isp }}&ie=utf-8&oe=utf-8&client=ubuntu&channel=fs&redir_esc=&ei=LGs9UInXHcuviQferIHwBA" target="_blank">{{ mx.isp }}</a></li>
+                    <li>{{ mx.hostname }} hosted by  <a href="http://www.google.com.au/search?q={{ mx.isp }}&ie=utf-8&oe=utf-8&client=ubuntu&channel=fs&redir_esc=&ei=LGs9UInXHcuviQferIHwBA" target="_blank" rel="nofollow">{{ mx.isp }}</a></li>
                 {% endfor %}
             </ul>
         </div>
