@@ -35,10 +35,10 @@ class Domain(models.Model):
     request_referer = models.CharField(max_length=255, null=True)
 
 
-    title = models.CharField(max_length=400, null=True)
-    keywords = models.CharField(max_length=2550, null=True)
-    description = models.CharField(max_length=2550, null=True)
-    encoding = models.CharField( max_length=20,null=True)
+    title = models.CharField(null=True)
+    keywords = models.CharField(null=True)
+    description = models.CharField(null=True)
+    encoding = models.CharField(null=True)
     full_html = models.TextField()
     content = models.TextField()
 
@@ -77,9 +77,9 @@ class Domain(models.Model):
 
 
 class SeoImage(models.Model):
-    src = models.CharField(max_length=400,null=True)
-    alt = models.CharField(max_length=1000,null=True)
-    title = models.CharField(max_length=1000,null=True)
+    src = models.CharField(null=True)
+    alt = models.CharField(null=True)
+    title = models.CharField(null=True)
     
     domain = models.ForeignKey(Domain)
 
@@ -92,7 +92,7 @@ class SeoImage(models.Model):
 
 class SeoHeading(models.Model):
     level = models.IntegerField()
-    content = models.CharField(max_length=1000,null=True)
+    content = models.CharField(null=True)
     domain = models.ForeignKey(Domain)
 
     def __unicode__(self):

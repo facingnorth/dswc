@@ -41,13 +41,14 @@ Click on Bing Search API. Then download the Bing API Schema Guide
         for key,value in params.iteritems():
             request += '&' + key + '=' + str(value)
         request = self.bing_api + self.replace_symbols(request)
+
+        print request
         return requests.get(request, auth=(self.key, self.key)).json
 
 
 if __name__ == "__main__":
-    my_key = "pGNe05nS2XVcrmn/LX9nmtBfB08M5F+U9K0oRHpEN0U="
+    my_key = "key"
     bing = BingSearchAPI(my_key)
-
     data = []
 
 
@@ -57,16 +58,27 @@ if __name__ == "__main__":
                   '$format': 'json',
                   '$top': 20,
                   #'$offset':(0+j)*20
-                  '$skip':(0+j)*20
+                  #'$skip':(0+j)*20
         }
-        x =  bing.search('web','sydney web design',params)
+        x =  bing.search('web','web',params)
 
+        print x
 
         for foo in x[u'd'][u'results']:
             i=0
             for bar in foo:
-                print foo['Web'][i]['Url']
-                data.append(foo['Web'][i]['Url'])
+                url = ""
+                try:
+                    url = foo['Web'][i]['Url']
+                    if  "wordpress.com" in url:
+                        continue
+                    else:
+                        print url
+                    data.append(foo['Web'][i]['Url'])
+                except Exception, e:
+                    pass
+
+
                 i+=1
 
         j+=1

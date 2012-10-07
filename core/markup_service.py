@@ -117,7 +117,13 @@ def extract_seo_facts(url):
     soup = BeautifulSoup(source)
     soup.prettify()
 
-    dict['title'] = str(soup.title.string) #get html page title
+    #some default
+    dict['title'] = ''
+
+
+    if soup.title:
+        dict['title'] = str(soup.title.string) #get html page title
+
     dict['encoding'] = soup.declaredHTMLEncoding #get html page encoding
 
     #iterate through meta tags to find keywords and description

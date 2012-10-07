@@ -30,6 +30,7 @@ class Command(NoArgsCommand):
         for d in data:
             try:
                 d = extract_domain_name(d)
+                d = d.strip()
                 domain = Domain.objects.all().filter(domain=d)
                 if domain:
                     logger.info("%s has been found in system, skip" % d)
