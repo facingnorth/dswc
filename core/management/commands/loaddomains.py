@@ -1,5 +1,5 @@
 from optparse import make_option
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import NoArgsCommand, BaseCommand
 import sys
 import os
 
@@ -9,7 +9,7 @@ from core.service import extract_domain_name
 logger = logging.getLogger(__name__)
 print logger.name
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
 
     help = "Whatever you want to print here"
 
@@ -17,14 +17,14 @@ class Command(NoArgsCommand):
         make_option('--verbose', action='store_true'),
         )
 
-    def handle_noargs(self, **options):
-
+    def handle(self, *args, **options):
+        print args[0]
         from core.models import Domain
         from core.views import search
         logger.info("custom command start running ")
         from django.test import Client
         c = Client(HTTP_USER_AGENT='Mozilla/5.0')
-        f = open("/tmp/domains.txt")
+        f = open(args[0])
         data = f.readlines()
 
         for d in data:
