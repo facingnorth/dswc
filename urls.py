@@ -15,10 +15,10 @@ urlpatterns = patterns('',
         (r'^admin/', include(admin.site.urls)),
         (r'^$', "core.views.index"),
         (r'^search$', "core.views.search"),
-        (r'^archive', "core.views.archive"),
-        url(r'^view/(?P<d>.+)/$', 'core.views.view',name="view_domain"),
-    
 
+        url(r'^view/(?P<d>.+)/$', 'core.views.view',name="view_domain"),
+        url(r'^archive/isp/(?P<isp>.*)/$', 'core.views.archive',name="view_archive"),
+        (r'^archive', "core.views.archive"),
 )
 
 urlpatterns += staticfiles_urlpatterns()

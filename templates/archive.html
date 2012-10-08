@@ -4,8 +4,11 @@
 
 
 {% block content %}
+{% autopaginate domains %}
 
 <h3>Recent Searches</h3>
+    <a href="/archive">all</a>
+    {% paginate %}
 <table  class="table table-striped">
 <thead>
     <tr>
@@ -16,7 +19,7 @@
         <th>Page Rank</th>
     </tr>
 </thead>
-    {% autopaginate domains %}
+
     {% for d in domains %}
         <tr>
             {% url 'view_domain' d.domain as the_url %}
@@ -28,7 +31,10 @@
                 {% elif domain.isp == "New Dream Network, LLC"  %}
                     <a href="http://goo.gl/etVsT" target="_blank">{{ d.isp }}</a>
                 {% else %}
-                    <a href="http://www.google.com.au/search?q={{ d.isp }}&ie=utf-8&oe=utf-8&client=ubuntu&channel=fs&redir_esc=&ei=LGs9UInXHcuviQferIHwBA" target="_blank">{{ d.isp }}</a>
+                    {% with d.isp|iriencode as isp %}
+                    {% url 'view_archive' isp as the_url %}
+                    <a href="{{ the_url }}">{{ d.isp }}</a>
+                    {% endwith %}
                 {% endif %}
             </td>
             <td>{{ d.alexa_rank |intcomma}}</td>

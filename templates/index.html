@@ -35,7 +35,11 @@
                     {% elif domain.isp == "New Dream Network, LLC"  %}
                     <a href="http://goo.gl/etVsT" target="_blank" rel="nofollow">{{ domain.isp }}</a>
                     {% else %}
-                    <a href="http://www.google.com.au/search?q={{ domain.isp }}&ie=utf-8&oe=utf-8&client=ubuntu&channel=fs&redir_esc=&ei=LGs9UInXHcuviQferIHwBA" target="_blank" rel="nofollow">{{ domain.isp }}</a>
+                        {% with domain.isp|iriencode as isp %}
+                            {% url 'view_archive' isp as the_url %}
+                            <a href="{{ the_url }}">{{ domain.isp }}</a>
+                        {% endwith %}
+
                     {% endif %}
 
                 </li>

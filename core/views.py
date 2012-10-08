@@ -24,9 +24,13 @@ def index(request):
 
 def view(request, d):
     logger.info("view view>>%s" % d)
+
     try:
-        domain = Domain.objects.all().filter(archived__isnull=True).get(domain=d)
-    except :
+        domains = Domain.objects.all().filter(archived__isnull=True).filter(domain=d).order_by("-checked_at")
+        if domains:
+            domain = domains[0]
+    except Exception,e :
+        print e
         return search(request, d)
 
 
@@ -43,8 +47,12 @@ def view(request, d):
 
 
 
-def archive(request):
-    domains = Domain.objects.all().filter(archived__isnull=True).order_by("-checked_at")
+def archive(request,isp = None):
+    domains = None
+    if isp:
+        domains = Domain.objects.all().filter(archived__isnull=True).filter(isp=isp).order_by("-checked_at")
+    else:
+        domains = Domain.objects.all().filter(archived__isnull=True).order_by("-checked_at")
     return render(request, 'archive.html', {"domains": domains})
 
 
