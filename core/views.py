@@ -27,10 +27,12 @@ def view(request, d):
 
     try:
         domains = Domain.objects.all().filter(archived__isnull=True).filter(domain=d).order_by("-checked_at")
+        logger.info("domains are %s" % domains)
         if domains:
             domain = domains[0]
     except Exception,e :
-        print e
+        logger.error("error found during domain search %s" % d)
+        logger.error(e)
         return search(request, d)
 
 
